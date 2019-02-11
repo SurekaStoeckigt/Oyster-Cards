@@ -2,6 +2,7 @@
 class Oystercard
 attr_reader :balance, :state
 MAXIMUM_BALANCE = 90
+MINIMUM_BALANCE = 1
 
   def initialize(balance = 0, state=false)
     @balance = balance
@@ -22,7 +23,8 @@ MAXIMUM_BALANCE = 90
   end
 
   def touch_in
-    @state = true
+      raise "Can't travel" if @balance <= MINIMUM_BALANCE
+      @state = true, @balance -= 1
   end
 
   def touch_out

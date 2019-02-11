@@ -29,10 +29,15 @@ describe Oystercard do
   end
 
   it 'recognizes when its in journey' do
-    oystercard = Oystercard.new(false)
+    oystercard = Oystercard.new(10,false)
     oystercard.touch_in
     oystercard.touch_out
     expect(oystercard).not_to be_in_journey #.to eq false
+  end
+
+  it 'needs £1 to travel' do
+    oystercard = Oystercard.new(0.5, false)
+    expect{oystercard.touch_in}.to raise_error "Can't travel"
   end
 
 end
