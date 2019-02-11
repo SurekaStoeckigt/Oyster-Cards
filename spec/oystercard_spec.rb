@@ -17,15 +17,17 @@ describe Oystercard do
   end
 
   it 'has raises an error if balance exceeds maximum limit of £90' do
-  max_bal = Oystercard::MAXIMUM_BALANCE
-  oystercard = Oystercard.new
-  oystercard.top_up max_bal
-  #oystercard2 = Oystercard.new(85)
-  #oystercard1.top_up(3)
-  #oystercard2.top_up(15)
-  #expect{oystercard1.balance}.not_to raise_error.with_message("Maximum Oystercard Balance Exceeded")
-  expect{oystercard.top_up 1}.to raise_error "Maximum Oystercard Balance Exceeded"
+    max_bal = Oystercard::MAXIMUM_BALANCE
+    oystercard = Oystercard.new
+    oystercard.top_up max_bal
+    expect{oystercard.top_up 1}.to raise_error "Maximum Oystercard Balance Exceeded"
   end
+
+  it 'deducts money from balance' do
+    oystercard = Oystercard.new(20)
+    expect{oystercard.deduct(10)}.to change{oystercard.balance}.by -10
+  end
+
 end
 
 #NameError - Unitialized constant Oystercard
