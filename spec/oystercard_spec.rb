@@ -24,8 +24,15 @@ describe Oystercard do
   end
 
   it 'deducts money from balance' do
-    oystercard = Oystercard.new(20)
+    oystercard = Oystercard.new
     expect{oystercard.deduct(10)}.to change{oystercard.balance}.by -10
+  end
+
+  it 'recognizes when its in journey' do
+    oystercard = Oystercard.new(false)
+    oystercard.touch_in
+    oystercard.touch_out
+    expect(oystercard).not_to be_in_journey #.to eq false
   end
 
 end
