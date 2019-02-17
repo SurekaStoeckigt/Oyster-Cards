@@ -2,7 +2,9 @@ require 'oystercard.rb'
 
 describe Oystercard do
 
-let(:station) {double :station}
+let(:entry_station) {double :station}
+let(:exit_station) {double :station}
+let(:journey) {{entry_station: entry_station, exit_station: exit_station}}
   #describe balance on initialize
   it 'checks that the cards balance is 0' do
     oystercard = Oystercard.new
@@ -25,32 +27,54 @@ let(:station) {double :station}
   #describe deduct do
   it 'deducts correct amount on touch_out when journey is complete' do
     oystercard = Oystercard.new(10)
-    expect{oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::MINIMUM_CHARGE)
+    expect{oystercard.touch_out(exit_station)}.to change{oystercard.balance}.by(-Oystercard::MINIMUM_CHARGE)
   end
   #touch_in, in_journey?
   it 'recognizes when its in journey' do
     oystercard = Oystercard.new(10,false)
-    oystercard.touch_in(station)
+    oystercard.touch_in(entry_station)
     expect(oystercard).to be_in_journey #.to eq true
   end
   #touch_out, in journey?
   it 'recognizes when its in journey' do
     oystercard = Oystercard.new(10,false)
-    oystercard.touch_in(station)
-    oystercard.touch_out
+    oystercard.touch_in(entry_station)
+    oystercard.touch_out(exit_station)
     expect(oystercard).not_to be_in_journey #.to eq false
   end
   # error if Oystercard::MINIMUM_BALANCE(£1 is reduced)
   it 'needs £1 to travel' do
     oystercard = Oystercard.new(0.5, false)
-    expect{oystercard.touch_in(station)}.to raise_error "Can't travel- need £1"
+    expect{oystercard.touch_in(entry_station)}.to raise_error "Can't travel- need £1"
   end
-
+  #stores an entry_station
   it 'stores the entry station' do
     oystercard = Oystercard.new
     oystercard.top_up(20)
-    oystercard.touch_in(station)
-    expect(oystercard.entry_station).to eq station
+    oystercard.touch_in(entry_station)
+    expect(oystercard.entry_station).to eq entry_station
+  end
+  #stores journey and exit station
+  it 'stores an exit station' do
+    oystercard = Oystercard.new
+    oystercard.top_up(20)
+    oystercard.touch_in(entry_station)
+    oystercard.touch_out(exit_station)
+    expect(oystercard.exit_station).to eq exit_station
+  end
+  #journey is empty on default
+  it 'stores an empty list of journeys on default' do
+    oystercard = Oystercard.new
+    oystercard.top_up(20)
+    expect(oystercard.journeys).to be_empty
+  end
+
+  it 'stores a journey' do
+    oystercard = Oystercard.new
+    oystercard.top_up(20)
+    oystercard.touch_in(entry_station)
+    oystercard.touch_out(exit_station)
+    expect(oystercard.journeys).to include journey
   end
 
 end
