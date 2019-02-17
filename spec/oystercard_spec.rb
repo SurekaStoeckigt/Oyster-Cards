@@ -30,20 +30,20 @@ let(:station) {double :station}
   #touch_in, in_journey?
   it 'recognizes when its in journey' do
     oystercard = Oystercard.new(10,false)
-    oystercard.touch_in
+    oystercard.touch_in(station)
     expect(oystercard).to be_in_journey #.to eq true
   end
   #touch_out, in journey?
   it 'recognizes when its in journey' do
     oystercard = Oystercard.new(10,false)
-    oystercard.touch_in
+    oystercard.touch_in(station)
     oystercard.touch_out
     expect(oystercard).not_to be_in_journey #.to eq false
   end
   # error if Oystercard::MINIMUM_BALANCE(£1 is reduced)
   it 'needs £1 to travel' do
     oystercard = Oystercard.new(0.5, false)
-    expect{oystercard.touch_in}.to raise_error "Can't travel- need £1"
+    expect{oystercard.touch_in(station)}.to raise_error "Can't travel- need £1"
   end
 
   it 'stores the entry station' do

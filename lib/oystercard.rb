@@ -7,7 +7,6 @@ MINIMUM_CHARGE = 1.5
 
   def initialize(balance = 0, in_journey=false)
     @balance = balance
-    @in_journey = in_journey
   end
 
   def top_up(amount)
@@ -16,18 +15,17 @@ MINIMUM_CHARGE = 1.5
   end
 
   def in_journey?
-    @in_journey
+     !!entry_station
   end
 
   def touch_in(station)
       raise "Can't travel- need £1" if @balance <= MINIMUM_BALANCE
-      @in_journey = true
       @entry_station = station
   end
 
   def touch_out
     deduct(MINIMUM_CHARGE)
-    @in_journey = false
+    @entry_station = nil
   end
 
   private
