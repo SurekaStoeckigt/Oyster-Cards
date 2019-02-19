@@ -1,4 +1,5 @@
 require 'journey'
+require 'station'
 
 describe Journey do
   let(:entry_station) {double :station, zone: 1}
@@ -29,20 +30,39 @@ end
 
 it 'calculates the fare of the journey' do
   journey = Journey.new(entry_station)
+  entry_station = Station.new(entry_station, 2)
+  exit_station = Station.new(exit_station, 8)
   journey.end_journey(exit_station)
-  expect(journey.fare).to eq 1
+  expect(journey.fare(entry_station, exit_station)).to eq 7
+end
+
+it 'calculates the fare of the journey' do
+  journey = Journey.new(entry_station)
+  entry_station = Station.new(entry_station, 1)
+  exit_station = Station.new(exit_station, 9)
+  journey.end_journey(exit_station)
+  expect(journey.fare(entry_station, exit_station)).to eq 9
 end
 
 it 'knows if a journey is incomplete' do
   journey = Journey.new(entry_station)
-  expect(journey.fare). to eq Journey::PENALTY
+  entry_station = Station.new(entry_station, 1)
+  expect(journey.fare(entry_station, exit_station)). to eq Journey::PENALTY
 end
 
 it 'knows if a journey is complete' do
   journey = Journey.new(entry_station)
+  entry_station = Station.new(entry_station, 1)
+  exit_station = Station.new(exit_station, 1)
   journey.end_journey(exit_station)
   expect(journey.complete?).to eq true
 end
+
+it 'has a penalty fare by default' do
+  journey = Journey.new(entry_station)
+  expect(journey.fare(entry_station, exit_station)).to eq Journey::PENALTY
+end
+
 #knows if a journey is complete
 
 # knows if a journey is incomplete by default

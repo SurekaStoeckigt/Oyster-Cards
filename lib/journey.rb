@@ -1,13 +1,15 @@
 require_relative 'oystercard'
+require_relative 'station'
 
 class Journey
   attr_reader :entry_station, :exit_station
 # move in journey?, touch_in, touch_out
-PENALTY = 1
+PENALTY = 6
 
 def initialize(entry_station = nil)
   @entry_station = entry_station
   @exit_station = nil
+  @fare = PENALTY
   #initialize with entry
   #receives messages from oystercard class
   #fare - return correct fare
@@ -29,11 +31,13 @@ def complete?
   end
 end
 
-def fare
+def fare(entry_station, exit_station)
   if complete? == true
-    @fare = Oystercard::MINIMUM_CHARGE
+    @fare = Oystercard::MINIMUM_CHARGE + (exit_station.zone - entry_station.zone)
   else
+
     @fare = PENALTY
+
   end
 end
 
