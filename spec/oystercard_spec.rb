@@ -1,4 +1,5 @@
-require 'oystercard.rb'
+require 'oystercard'
+require 'journey'
 
 describe Oystercard do
 
