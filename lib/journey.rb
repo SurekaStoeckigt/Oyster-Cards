@@ -6,7 +6,7 @@ class Journey
 # move in journey?, touch_in, touch_out
 PENALTY = 6
 
-def initialize(entry_station)
+def initialize(entry_station=nil)
   @entry_station = entry_station
   @exit_station = nil
   @fare = PENALTY
