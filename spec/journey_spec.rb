@@ -32,6 +32,17 @@ it 'calculates the fare of the journey' do
   journey.end_journey(exit_station)
   expect(journey.fare).to eq 1
 end
+
+it 'knows if a journey is incomplete' do
+  journey = Journey.new(entry_station)
+  expect(journey.fare). to eq Journey::PENALTY
+end
+
+it 'knows if a journey is complete' do
+  journey = Journey.new(entry_station)
+  journey.end_journey(exit_station)
+  expect(journey.complete?).to eq true
+end
 #knows if a journey is complete
 
 # knows if a journey is incomplete by default

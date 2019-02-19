@@ -33,8 +33,8 @@ def fare
   if complete? == true
     @fare = Oystercard::MINIMUM_CHARGE
   else
-    @fare = Oystercard::PENALTY
+    @fare = PENALTY
   end
 end
 
-end 
+end
